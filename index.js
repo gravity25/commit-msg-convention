@@ -75,11 +75,15 @@ const options = {
     process.env.CZ_JIRA_APPEND ||
     config.jiraAppend ||
     defaults.jiraAppend,
-    exclamationMark: getEnvOrConfig(
-      process.env.CZ_EXCLAMATION_MARK,
-      config.exclamationMark,
-      defaults.exclamationMark
-    )
+  jiraSeparator:
+    process.env.CZ_JIRA_SEPARATOR ||
+    config.jiraSeparator ||
+    defaults.jiraSeparator,
+  exclamationMark: getEnvOrConfig(
+    process.env.CZ_EXCLAMATION_MARK,
+    config.exclamationMark,
+    defaults.exclamationMark
+  ),
 };
 
 (function(options) {

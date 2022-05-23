@@ -61,7 +61,8 @@ Like commitizen, you can specify the configuration of cz-conventional-changelog-
 | CZ_JIRA_PREFIX       | jiraPrefix      | "DAZ"             | If this is set it will be will be displayed as the default JIRA ticket prefix                                                                                           |
 | CZ_JIRA_LOCATION     | jiraLocation    | "pre-description" | Changes position of JIRA ID. Options: `pre-type`, `pre-description`, `post-description`, `post-body`                                                                    |
 | CZ_JIRA_PREPEND      | jiraPrepend     | ""                | Prepends JIRA ID with an optional decorator. e.g.: `[DAZ-1234`                                                                                                          |
-| CZ_JIRA_APPEND       | jiraAppend      | ""                | Appends JIRA ID with an optional decorator. e.g.: `DAZ-1234]`                                                                                                           |
+| CZ_JIRA_APPEND       | jiraAppend      | ""                | Appends JIRA ID with an optional decorator. e.g.: `DAZ-1234]`
+| CZ_JIRA_SEPARATOR    | jiraSeparator   | " "                | Separate JIRA ID with an optional decorator. e.g.: `DAZ-1234:feat`                                                                                                           |
 | CZ_EXCLAMATION_MARK  | exclamationMark | false             | On breaking changes, adds an exclamation mark (!) after the scope, e.g.: `type(scope)!: break stuff`. When activated, reduces the effective allowed header length by 1. |
 
 ### Jira Location Options
@@ -156,6 +157,7 @@ List of all supported configurable options when using the _configurable_ approac
 | jiraLocation    | "pre-description" | Changes position of JIRA ID. Options: `pre-type`, `pre-description`, `post-description`, `post-body`                                                                                                                                         |
 | jiraPrepend     | ""                | Prepends JIRA ID with an optional decorator. e.g.: `[DAZ-1234`                                                                                                                                                                               |
 | jiraAppend      | ""                | Appends JIRA ID with an optional decorator. e.g.: `DAZ-1234]`                                                                                                                                                                                |
+| jiraSeparator   | " "               | Separate JIRA ID with an optional decorator. e.g.: `DAZ-1234:feat`  |
 | exclamationMark | false             | On breaking changes, adds an exclamation mark (!) after the scope, e.g.: `type(scope)!: break stuff`. When activated, reduces the effective allowed header length by 1.                                                                      |
 
 
