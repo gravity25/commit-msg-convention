@@ -16,6 +16,17 @@ function getEnvOrConfig(env, configVar, defaultValue) {
   return defaultValue;
 }
 
+function getStringTypeConfig(env, configVar, defaultValue) {
+  const isValueSet = value => typeof value === 'string';
+  
+  const isEnvSet = isValueSet(env);
+  const isConfigSet = isValueSet(configVar);
+
+  if (isEnvSet) return env;
+  if (isConfigSet) return configVar;
+  return defaultValue;
+}
+
 const options = {
   types: conventionalCommitTypes,
   scopes: config.scopes,
@@ -75,10 +86,11 @@ const options = {
     process.env.CZ_JIRA_APPEND ||
     config.jiraAppend ||
     defaults.jiraAppend,
-  jiraSeparator:
-    process.env.CZ_JIRA_SEPARATOR ||
-    config.jiraSeparator ||
-    defaults.jiraSeparator,
+  jiraSeparator: getStringTypeConfig(
+    process.env.CZ_JIRA_SEPARATOR,
+    config.jiraSeparator,
+    defaults.jiraSeparator
+  ),
   exclamationMark: getEnvOrConfig(
     process.env.CZ_EXCLAMATION_MARK,
     config.exclamationMark,
