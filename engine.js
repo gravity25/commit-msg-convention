@@ -35,16 +35,12 @@ module.exports = function(options) {
     switch(location) {
       case 'pre-type':
         return jiraWithDecorators + type + scope + ': ' + subject;
-        break;
       case 'pre-description':
         return type + scope + ': ' + jiraWithDecorators + subject;
-        break;
       case 'post-description':
         return type + scope + ': ' + subject + ' ' + jiraWithDecorators;
-        break;
       case 'post-body':
         return type + scope + ': ' + subject;
-        break;
       default:
         return type + scope + ': ' + jiraWithDecorators + subject;
     }
@@ -63,10 +59,9 @@ module.exports = function(options) {
   const maxHeaderWidth = getFromOptionsOrDefaults('maxHeaderWidth');
 
   const branchName = execSync('git branch --show-current').toString().trim();
-  const jiraIssueRegex = /(?<jiraIssue>(?<!([a-zA-Z0-9]{1,10})-?)[a-zA-Z0-9]+-\d+)/;
+  const jiraIssueRegex = /([a-zA-Z1-9]+-[0-9]+)/g;
   const matchResult = branchName.match(jiraIssueRegex);
-  const jiraIssue =
-    matchResult && matchResult.groups && matchResult.groups.jiraIssue;
+  const jiraIssue = matchResult && matchResult.pop();
   const hasScopes =
     options.scopes &&
     Array.isArray(options.scopes) &&
@@ -247,10 +242,11 @@ module.exports = function(options) {
         const addExclamationMark = options.exclamationMark && answers.breaking;
         scope = addExclamationMark ? scope + '!' : scope;
 
-        // Get Jira issue prepend and append decorators
+        // Get Jira issue prepend, append and separator decorators
         var prepend = options.jiraPrepend || ''
         var append = options.jiraAppend || ''
-        var jiraWithDecorators = answers.jira ? prepend + answers.jira + append + ' ': '';
+        var separator = typeof options.jiraSeparator === 'string' ? options.jiraSeparator : ' ';
+        var jiraWithDecorators = answers.jira ? prepend + answers.jira + append + separator: '';
 
         // Hard limit this line in the validate
         const head = getJiraIssueLocation(options.jiraLocation, answers.type, scope, jiraWithDecorators, answers.subject);

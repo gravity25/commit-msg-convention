@@ -459,6 +459,23 @@ describe('commit message', function() {
       )
     ).to.equal(`[${jiraUpperCase}] ${type}(${scope}): ${subject}\n\n${body}`);
   });
+  it('jiraSeparator, jiraLocation decorator', function() {
+    expect(
+      commitMessage(
+        {
+          type,
+          scope,
+          jira,
+          subject,
+          body
+        },
+        {
+          jiraSeparator: '',
+          jiraLocation: 'pre-type'
+        }
+      )
+    ).to.equal(`${jiraUpperCase}${type}(${scope}): ${subject}\n\n${body}`);
+  });
 });
 
 describe('validation', function() {
@@ -676,6 +693,41 @@ describe('questions', function() {
   });
 });
 
+describe('Default jira issue', function() {
+  function mockOptions(branchName) {
+    mock('child_process', {
+      execSync: function() {
+        return branchName;
+      }
+    });
+    return mock.reRequire('./engine');
+  }
+
+  afterEach(function() {
+    delete require.cache[require.resolve('child_process')];
+    delete require.cache[require.resolve('./engine')];
+    mock.stopAll();
+  });
+
+  it('with baz-123: branch name same as jira issue', function() {
+    const newEngine = mockOptions('baz-123');
+    const jira = getQuestion('jira', null, newEngine);
+    expect(jira.default).to.equal('baz-123');
+  });
+
+  it('with random-baz-123: some random value prefixed with jira issue in the branch name', function() {
+    const newEngine = mockOptions('random-baz-123');
+    const jira = getQuestion('jira', null, newEngine);
+    expect(jira.default).to.equal('baz-123');
+  });
+
+  it('with random-456-baz-123: multiple type of jira issues in the branch name get the last one', function() {
+    const newEngine = mockOptions('random-456-baz-123');
+    const jira = getQuestion('jira', null, newEngine);
+    expect(jira.default).to.equal('baz-123');
+  });
+})
+
 function commitMessage(answers, options) {
   options = options || defaultOptions;
   var result = null;
@@ -720,10 +772,10 @@ function processQuestions(questions, answers, options) {
   }
 }
 
-function getQuestions(options) {
+function getQuestions(options, newEngine) {
   options = options || defaultOptions;
   var result = null;
-  engine(options).prompter({
+  (newEngine || engine)(options).prompter({
     prompt: function(questions) {
       result = questions;
       return {
@@ -735,9 +787,9 @@ function getQuestions(options) {
   return result;
 }
 
-function getQuestion(name, options) {
+function getQuestion(name, options, newEngine) {
   options = options || defaultOptions;
-  var questions = getQuestions(options);
+  var questions = getQuestions(options, newEngine);
   for (var i in questions) {
     if (questions[i].name === name) {
       return questions[i];

@@ -13,5 +13,6 @@ module.exports = {
   jiraLocation: 'pre-description',
   jiraPrepend: '',
   jiraAppend: '',
-  exclamationMark: false
+  exclamationMark: false,
+  jiraSeparator: ' ',
 };
